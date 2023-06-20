@@ -1,0 +1,149 @@
+---
+title: "Test task for a Junior Data Analyst job"
+output:
+  html_document:
+    df_print: paged
+date: '2023-06-16'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(corrr)
+
+```
+
+
+```{r}
+df <-  data.frame(
+  "Shop Name" = c("CoffeeAroma", "BeansTalk", "BrewMaster", "MochaMagic", "EspressoInn", "LatteLand", "JavaJungle", "CappuccinoCorner", "BlackBrew", "CuppaCharm"),
+  City = c("New York", "Chicago", "Los Angeles", "New York", "Chicago", "Los Angeles", "New York", "Chicago", "Los Angeles", "New York"),
+  "Average Daily Customer Count" = c(400, 350, 300, 500, 450, 375, 425, 500, 350, 475),
+  "Average Spend per Customer ($)" = c(5, 6, 7, 4, 5, 6, 7, 4, 6, 5),
+  Rating = c(4, 4.5, 4.7, 3.9, 4.1, 4.2, 4.8, 3.8, 4.4, 4.3),
+  stringsAsFactors = FALSE
+)
+
+df  
+
+```
+
+```{r}
+df$Shop.Name <- as.factor(df$Shop.Name)
+df$City <- as.factor(df$City)
+```
+
+# Which coffee shop has the most and the least customers per day?
+
+```{r message=FALSE, warning=FALSE}
+df %>% 
+    ggplot(aes(x = reorder(df$Shop.Name, df$Average.Daily.Customer.Count), y = df$Average.Daily.Customer.Count))+
+    geom_col()+
+    coord_flip()+
+    geom_text(aes(label = df$Average.Daily.Customer.Count), vjust = 0.5, colour = "black", nudge_y = 40)+
+    xlab("Shop Name")+
+    ylab("Average daily customer count")
+```
+
+
+#### We can see here that the Coffe shop MochaMagic and CappuccinoCorner have the most average Daily Customer equal to 500, and the shop with the least average daily customer in BrewMaster with a count equal to 300,
+
+### we can analyse further to understand why?
+
+
+```{r}
+df%>%
+  ggplot(aes(x = reorder(df$Shop.Name, df$Average.Spend.per.Customer....), y = df$Average.Spend.per.Customer....))+
+    geom_col()+
+    coord_flip()+
+    geom_text(aes(label = df$Average.Spend.per.Customer....), vjust = 0.5, colour = "black", nudge_y = 0.25)+
+    xlab("Shop Name")+
+    ylab("Average amount spent per customer")
+```
+
+#### We can see from the amount spent per customer Graph that  MochaMagic and CappuccinoCorner that have the most number of customer is explained because they are the most affordable Coffee shops with an amount of 4$ per customer, also we can see that BrewMaster that have the least number of customers is one of the most expensive shops with an amount of 7$ per customer
+
+
+# Which coffee shop has the highest and lowest daily revenue?
+
+#### Here i created a column named daily revenue that is simply the product of the customer daily count and the average amount spent per customer in dollars   
+
+```{r}
+df$Daily.Revenue <- df$Average.Daily.Customer.Count * df$Average.Spend.per.Customer....
+
+df
+
+```
+
+```{r}
+df%>%
+  arrange(desc(df$Daily.Revenue))%>%
+  ggplot(aes(x = reorder(df$Shop.Name, df$Daily.Revenue),df$Daily.Revenue))+
+  geom_col()+
+  coord_flip()+
+  geom_text(aes(label = df$Daily.Revenue), vjust = 0.5, colour = "black", nudge_y = 550)+
+  geom_text(aes(label = df$Rating), vjust = 0.5, colour = "white", nudge_y = -950)+
+  xlab("Shop Name")+
+  ylab("Daily Revenue")+
+  ggplot2::facet_wrap(df$City)+
+  ylim(0, 4000)
+
+```
+
+#### We can see that most profitable Coffe shop is JavaJungle with an total ammount of 2975$ that's sue to his expensive prices, with 7$ per customer and a average number of customer daily equal to 425 but unlike BrewMaster, this shop focus on quality and satisfying customer that's apparent with their rating that is equal to 4.8, we can see that despite it's high prices it is the shop with the highest rating
+
+
+#### And we can see that the least profitable Coffee shops are MochaMagic CappuccinoCorner and CoffeeAroma, althought they have the lowest prices (4$-5$) this three shops have the worst rating 3.9, 3.8 and 4 respectively, which explains why they make the least amount of profit compared to the rest of Coffee shops
+
+
+#### We can see that the ratinig is an important factor for Coffee Shops, nowadays customers check the rating of a shop before going , we saw that even prices doesn't affect the amount of profit as long as the quality of the service is good
+
+
+#### but i noticed that there is a difference of revenue between JavaJungle and BrewMaster, they both have the same average amount spent by customer (7$) but JavaJungle have more customers, perhapes people in New York consume more Coffe compared to Los Angeles due to it being a more cool, relaxed atmosphere when New York lifestyle is more of a business work heavy city.  
+
+
+#### We can see that LatteLand even though it has a worse rating than BrewMaster because it has lower average amount spent by customer (6$) it attracyed more customers which as a results made them more profitable
+
+
+# Is there a correlation between the rating of a coffee shop and its daily revenue?
+
+#### Now we will study the correlation of the diffrent variables :
+
+```{r message=FALSE, warning=FALSE}
+
+correlate(df%>%
+            select(-Shop.Name, -City))
+```
+
+
+#### We can see from the correlation table that Rating have a average correlation with tha Daily revenue equal to 0.61 which indicates that even though rating is the cause of the high revenue , maybe the effect is not direct
+
+
+#### We can see from the correlation table that Rating have a high correlation with the Average amount Spend per Customer (0.94), so for a Coffee Shop the higher the rating is the higher the prices are which is logical you won't find a 5 dollar burger in a 5 star restaurant 
+
+
+#### we can also see that the Average amount Spend per Customer is highly correlated with Average Daily Customer Count (-0.8) which means that the higher the prices get the lower the number of customer will be
+
+
+#### In conclusion for a Coffee Shop to make a good profit, if it's in a Business City it needs to work on the quality of its service, the better the quality the better the rating the higher the prices should be as we saw in the correlation table, if it's in a city where people don't consume as much coffee they need to work on the quality of course but they neef to consider lowering the prices like we saw in the 3rd graph that strategy didn't work out very well for BrewMaster
+
+
+
+
+
+
+
+
+
+
+
+
+
