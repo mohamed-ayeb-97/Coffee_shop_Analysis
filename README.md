@@ -10,9 +10,9 @@ revenue?
 
 
 ![App Screenshot](screenshots/1.PNG)
-![App Screenshot](screenshots/2.png)
-![App Screenshot](screenshots/3.png)
-![App Screenshot](screenshots/4.png)
-![App Screenshot](screenshots/5.png)
-![App Screenshot](screenshots/6.png)
-![App Screenshot](screenshots/7.png)
+![App Screenshot](screenshots/2.PNG)
+![App Screenshot](screenshots/3.PNG)
+![App Screenshot](screenshots/4.PNG)
+![App Screenshot](screenshots/5.PNG)
+![App Screenshot](screenshots/6.PNG)
+![App Screenshot](screenshots/7.PNG)
